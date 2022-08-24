@@ -9,7 +9,8 @@ import re
 
 model_id = "CompVis/stable-diffusion-v1-4"
 device = "cuda"
-YOUR_TOKEN="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"
+YOUR_TOKEN=""
+
 
 pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", use_auth_token=YOUR_TOKEN)
 pipe = pipe.to(device)
