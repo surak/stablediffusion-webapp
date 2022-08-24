@@ -1,5 +1,6 @@
 # stablediffusion-webapp
 The minimal app for stable diffusions, using gradio
+<img alt="stablediffusion-demo" src="https://user-images.githubusercontent.com/878399/186395603-e34d925c-10ca-4236-8fa0-7511a777997e.png">
 
 This is a shameless clone of https://huggingface.co/spaces/stabilityai/stable-diffusion ,  which works with the downloaded model.
 
