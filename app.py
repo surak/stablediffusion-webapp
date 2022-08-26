@@ -4,20 +4,18 @@ import torch
 from torch import autocast
 from diffusers import StableDiffusionPipeline
 from datasets import load_dataset
-from PIL import Image  
+from PIL import Image
 import re
 
 model_id = "CompVis/stable-diffusion-v1-4"
 device = "cuda"
 YOUR_TOKEN=""
 
-
 pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", use_auth_token=YOUR_TOKEN)
 pipe = pipe.to(device)
 
 
 def infer(prompt, samples, steps, scale, seed):
-        
     generator = torch.Generator(device=device).manual_seed(seed)
     with autocast("cuda"):
         images_list = pipe(
@@ -27,11 +25,7 @@ def infer(prompt, samples, steps, scale, seed):
             generator=generator,
         )
     images = []
-    safe_image = Image.open(r"unsafe.png")
     for i, image in enumerate(images_list["sample"]):
-        #if(images_list["nsfw_content_detected"][i]):
-        #    images.append(safe_image)
-        #else:
             images.append(image)
     return images
 
@@ -80,14 +74,6 @@ css = """
             --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px var(--tw-ring-offset-width)) var(--tw-ring-color);
             --tw-ring-color: rgb(191 219 254 / var(--tw-ring-opacity));
             --tw-ring-opacity: .5;
-        }
-        #advanced-btn {
-            font-size: .7rem !important;
-            line-height: 19px;
-            margin-top: 24px;
-            margin-bottom: 12px;
-            padding: 2px 8px;
-            border-radius: 14px !important;
         }
         #advanced-options {
             display: none;
@@ -171,39 +157,6 @@ with block:
                   font-size: 1.75rem;
                 "
               >
-                <svg
-                  width="0.65em"
-                  height="0.65em"
-                  viewBox="0 0 115 115"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect width="23" height="23" fill="white"></rect>
-                  <rect y="69" width="23" height="23" fill="white"></rect>
-                  <rect x="23" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="23" y="69" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="46" width="23" height="23" fill="white"></rect>
-                  <rect x="46" y="69" width="23" height="23" fill="white"></rect>
-                  <rect x="69" width="23" height="23" fill="black"></rect>
-                  <rect x="69" y="69" width="23" height="23" fill="black"></rect>
-                  <rect x="92" width="23" height="23" fill="#D9D9D9"></rect>
-                  <rect x="92" y="69" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="115" y="46" width="23" height="23" fill="white"></rect>
-                  <rect x="115" y="115" width="23" height="23" fill="white"></rect>
-                  <rect x="115" y="69" width="23" height="23" fill="#D9D9D9"></rect>
-                  <rect x="92" y="46" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="92" y="115" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="92" y="69" width="23" height="23" fill="white"></rect>
-                  <rect x="69" y="46" width="23" height="23" fill="white"></rect>
-                  <rect x="69" y="115" width="23" height="23" fill="white"></rect>
-                  <rect x="69" y="69" width="23" height="23" fill="#D9D9D9"></rect>
-                  <rect x="46" y="46" width="23" height="23" fill="black"></rect>
-                  <rect x="46" y="115" width="23" height="23" fill="black"></rect>
-                  <rect x="46" y="69" width="23" height="23" fill="black"></rect>
-                  <rect x="23" y="46" width="23" height="23" fill="#D9D9D9"></rect>
-                  <rect x="23" y="115" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="23" y="69" width="23" height="23" fill="black"></rect>
-                </svg>
                 <h1 style="font-weight: 900; margin-bottom: 7px;">
                   Stable Diffusion
                 </h1>
@@ -236,38 +189,52 @@ with block:
             label="Generated images", show_label=False, elem_id="gallery"
         ).style(grid=[3], height="auto")
 
-        advanced_button = gr.Button("Advanced options", elem_id="advanced-btn")
 
-        with gr.Row(elem_id="advanced-options"):
-            samples = gr.Slider(label="Images", minimum=1, maximum=3, value=3, step=1)
-            steps = gr.Slider(label="Steps", minimum=1, maximum=50, value=40, step=1)
-            scale = gr.Slider(
-                label="Guidance Scale", minimum=0, maximum=50, value=7.5, step=0.1
-            )
-            seed = gr.Slider(
+        samples = gr.Slider(label="Images", minimum=1, maximum=6, value=6, step=1, interactive=True)
+        steps = gr.Slider(label="Steps", minimum=1, maximum=50, value=40, step=1, interactive=True)
+        scale = gr.Slider(
+                label="Guidance Scale", minimum=0, maximum=50, value=7.5, step=0.1, interactive=True
+        )
+        seed = gr.Slider(
                 label="Random seed",
                 minimum=0,
                 maximum=2147483647,
                 step=1,
                 randomize=True,
-            )
+                interactive=True
+        )
 
-        ex = gr.Examples(examples=examples, fn=infer, inputs=[text, samples, steps, scale, seed], outputs=gallery, cache_examples=True)
+
+        #with gr.Row(elem_id="advanced-options"):
+        #    samples = gr.Slider(label="Images", minimum=1, maximum=6, value=6, step=1)
+        #    steps = gr.Slider(label="Steps", minimum=1, maximum=50, value=40, step=1)
+        #    scale = gr.Slider(
+        #        label="Guidance Scale", minimum=0, maximum=50, value=7.5, step=0.1
+        #    )
+        #    seed = gr.Slider(
+        #        label="Random seed",
+        #        minimum=0,
+        #        maximum=2147483647,
+        #        step=1,
+        #        randomize=True,
+        #    )
+
+        ex = gr.Examples(examples=examples, fn=infer, inputs=[text, samples, steps, scale, seed], outputs=gallery, cache_examples=False)
         ex.dataset.headers = [""]
 
-        
+
         text.submit(infer, inputs=[text, samples, steps, scale, seed], outputs=gallery)
         btn.click(infer, inputs=[text, samples, steps, scale, seed], outputs=gallery)
-        advanced_button.click(
-            None,
-            [],
-            text,
-            _js="""
-            () => {
-                const options = document.querySelector("body > gradio-app").querySelector("#advanced-options");
-                options.style.display = ["none", ""].includes(options.style.display) ? "flex" : "none";
-            }""",
-        )
+        #advanced_button.click(
+        #    None,
+        #    [],
+        #    text,
+        #    _js="""
+        #    () => {
+        #        const options = document.querySelector("body > gradio-app").querySelector("#advanced-options");
+        #        options.style.display = ["none", ""].includes(options.style.display) ? "flex" : "none";
+        #    }""",
+        #)
         gr.HTML(
             """
                 <div class="footer">
