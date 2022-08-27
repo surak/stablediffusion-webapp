@@ -6,10 +6,21 @@ This is a shameless clone of https://huggingface.co/spaces/stabilityai/stable-di
 
 How to install the whole thing:
 
+
 - Accept the agreement here: https://huggingface.co/CompVis/stable-diffusion-v-1-4-original
-- Create a python virtual environment, activate it and start installing stuff: 
+- Create a conda virtual environment, activate it and start installing stuff.
+
+First, you probably need a gpu-enabled working version of PyTorch. For now, this means an NVIDIA GPU and CUDA. Do something like this:
 
 ```bash
+mkdir ~/gpu-stuff
+curl -o ~/gpu-stuff https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+cd ~/gpu-stuff 
+./Miniconda3-latest-Linux-x86_64.sh -b -f -p ~/gpu-stuff/miniconda3
+conda install -y mamba -n base -c conda-forge
+mamba install -c conda-forge cudatoolkit=11.2 cudnn=8.1.0 python-dotenv flask Pillow -y
+pip install --upgrade pip
+pip install image_to_numpy opencv-contrib-python
 pip install huggingface_hub
 pip install --upgrade diffusers transformers scipy gradio
 huggingface-cli login
