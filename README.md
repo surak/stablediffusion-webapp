@@ -22,10 +22,10 @@ mamba install -c conda-forge cudatoolkit=11.2 cudnn=8.1.0 python-dotenv flask Pi
 pip install --upgrade pip
 pip install image_to_numpy opencv-contrib-python
 pip install huggingface_hub
-pip install --upgrade diffusers transformers scipy gradio
+pip install --upgrade diffusers transformers scipy gradio datasets
 huggingface-cli login
 ```
-
+- Make sure typing-extensions is > 4
 - Get a token from huggingface. The login thing above should help.
 - Add the token to the line which says `YOUR_TOKEN=""` on the app.py
 - Run it: `python app.py`
